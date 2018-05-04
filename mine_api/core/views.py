@@ -8,6 +8,7 @@ from django.contrib.auth import (
 
 from rest_framework.decorators import action
 from rest_framework import status
+from rest_framework.permissions import IsAuthenticated
 from rest_framework import viewsets
 from rest_framework.response import Response
 from rest_framework import generics
@@ -27,6 +28,7 @@ User = get_user_model()
 class GameViewSet(viewsets.ModelViewSet):
     queryset = Game.objects.all()
     serializer_class = GameSerializer
+    permission_classes = (IsAuthenticated,)
 
     def perform_create(self, serializer):
         serializer.save(user=self.request.user)
