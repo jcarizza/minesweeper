@@ -1,0 +1,35 @@
+table {
+  border-collapse: collapse;
+}
+
+table tr{
+  border: 1px solid #000;
+  width: 10px !important;
+  line-height: 10px;
+}
+
+table td{
+  border: 1px solid #000;
+  width: 10px !important;
+  height: 10px !important;
+}
+
+td.hidden {
+  background-color: #ccc;
+}
+
+td.hasMine {
+  background-color: #a22;
+}
+
+td.hasMine:before {
+  content: '*';
+}
+
+td.flag {
+  background-color: #819;
+}
+
+td.revealed {
+  background-color: #fff;
+}

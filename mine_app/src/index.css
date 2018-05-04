@@ -1,0 +1,23 @@
+body {
+  margin: 0;
+  padding: 0;
+  font-family: sans-serif;
+}
+
+
+.login-form {
+    border: 5px solid #c23;
+    width: 150px;
+    margin: 0 auto !important;
+    margin-top: 50px !important;
+    border-radius: 20px;
+    padding: 40px;
+}
+
+.login-form input {
+    display: block;
+}
+
+.login-form button {
+    margin: 5px 5px 5px 0px;
+}
