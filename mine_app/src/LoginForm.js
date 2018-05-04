@@ -16,7 +16,7 @@ class LoginForm extends React.Component {
 	doLogin(event) {
 		let foo = login(this.state.username, this.state.password).then((foo) => {
       if (foo !== undefined) {
-        alert('logueado');
+        this.props.goTo('/game');
       }
     })
     event.preventDefault();

@@ -12,8 +12,6 @@ export function getGames() {
     {
       headers: { Authorization: `Token ${getToken()}`}
     })
-    
-
 }
 
 export function login(username, password) {
