@@ -13,6 +13,7 @@ class Game(models.Model):
     time: int - The playing time in seconds
     game_over: bool - If the game is finished and the player loose
     win: bool - If the game is finished and the player won
+    finished: bool - Game is ended
     user: User - The user whose belong this game
 
     """
@@ -21,4 +22,5 @@ class Game(models.Model):
     time = models.IntegerField(default=0)
     game_over = models.BooleanField(default=False)
     win = models.BooleanField(default=False)
+    finished = models.BooleanField(default=False)
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete='CASCADE')
