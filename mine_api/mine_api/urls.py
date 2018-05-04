@@ -27,6 +27,6 @@ router.register(r'game', GameViewSet, base_name='game')
 
 urlpatterns = [
     path('api/', include(router.urls)),
-    path('api/auth', AuthView.as_view()),
+    path('api/auth/', AuthView.as_view()),
     path('admin/', admin.site.urls)
 ]
