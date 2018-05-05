@@ -1,3 +1,5 @@
+import json
+
 from django.utils.translation import ugettext as _
 from django.shortcuts import render
 from django.conf import settings
@@ -34,6 +36,18 @@ class GameViewSet(viewsets.ModelViewSet):
 
     def perform_create(self, serializer):
         serializer.save(user=self.request.user)
+
+    @action(methods=['put'], detail=True)
+    def update_map(self, request, pk=None):
+        """
+            Update map
+            
+            Use an action to update the map only.
+        """
+        game = self.get_object()
+        game.map_json = json.dumps(request.data['map_json'])
+        game.save()
+        return Response(GameSerializer(game).data, status=status.HTTP_200_OK)
 
     @action(methods=['post'], detail=True, serializer_class=EndGameSerializer)
     def finish(self, request, pk=None):
