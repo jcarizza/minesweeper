@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
 
+import { Button, Container, Row, Col } from 'reactstrap';
+
 import Game from './Game';
 import LoginForm from './LoginForm';
 import Dash from './Dash';
@@ -59,11 +61,15 @@ class App extends Component {
 
   render() {
     return (
-      <div>
+      <Container>
+        <Row>
+          <Col md={{ size: 6, order: 1, offset: 3}} sm={{ size: 6, order: 1, offset: 3}}>
         { this.state.path == '/dash' ? <Dash goTo={this.state.goTo} isLoggedIn={this.state.isLoggedIn} continueGame={this.state.continueGame} startNewGame={this.state.startNewGame} /> : null }
         { this.state.path == '/game' ? <Game goTo={this.state.goTo} isLoggedIn={this.state.isLoggedIn} gameId={this.state.gameId} isNewGame={this.state.isNewGame} /> : null }
         { this.state.path == '/login' ? <LoginForm goTo={this.state.goTo} isLoggedIn={this.state.isLoggedIn} /> : null }
-      </div>
+          </Col>
+        </Row>
+      </Container>
     )
   }
 }

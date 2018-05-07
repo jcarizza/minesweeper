@@ -4,26 +4,21 @@ table {
 
 table tr{
   border: 1px solid #000;
-  width: 10px !important;
-  line-height: 10px;
 }
 
 table td{
-  border: 1px solid #000;
-  width: 10px !important;
-  height: 10px !important;
+  width: 30px !important;
+  height: 30px !important;
+  border: 2px solid #ccc;
+  border-radius: 5px;
 }
 
 td.hidden {
-  background-color: #ccc;
+  background-color: #e8dddd;
 }
 
 td.hasMine {
   background-color: #a22;
-}
-
-td.hasMine:before {
-  content: '*';
 }
 
 td.flag {
@@ -32,4 +27,9 @@ td.flag {
 
 td.revealed {
   background-color: #fff;
+}
+
+
+.container {
+  margin-top: 20px;
 }

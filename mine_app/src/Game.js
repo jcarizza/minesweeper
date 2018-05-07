@@ -49,10 +49,14 @@ class Cell extends Component {
     }
   }
 
+  minesAround() {
+    return this.props.minesAround > 0 ? this.props.minesAround: ''
+  }
+
   render() {
 
     return (
-      <td onClick={this.reveal.bind(this)} className={this.defineStyle()}>{!this.props.hidden ? this.props.minesAround: ''}</td>
+      <td style={{height: '30px'}} onClick={this.reveal.bind(this)} className={this.defineStyle()}>{!this.props.hidden && this.props.mine ? 'B': this.minesAround()}</td>
     )
   }
 }
@@ -98,7 +102,9 @@ class Board extends Component {
       createGame({
         map_length: props.SIZE,
         map_json: JSON.stringify(newMAPA)
-      })
+      }).then(response => {
+        this.setState({gameId: response.id})
+      });
     } else {
       // Load from api
       this.state = {rows:[], MAPA: [], isGameOver: false};
@@ -166,6 +172,7 @@ class Board extends Component {
       }
     }
 
+    // Calculate mines around each cell
     let count = 0;
     this.state.rows.map(cell => {
       let ma = this.getNeighbors(cell.props.row, cell.props.col).filter((n, i) => {
@@ -175,6 +182,16 @@ class Board extends Component {
       count += 1;
     })
     this.setState({MAPA: arr, rows: []});
+
+    // Check if user won
+    let unRevealed = this.state.rows.filter((cell, index) => {
+      console.log(cell.props.hidden === true, ' ', cell.props.mine === null)
+      console.log(cell.props.hidden === true && cell.props.mine === null)
+      return cell.props.hidden === true && cell.props.mine === null
+    });
+    if (unRevealed.length === 0) {
+      alert('Ganaste!');
+    }
     this.updateGame()
   }
 
@@ -193,7 +210,7 @@ class Board extends Component {
   }
 
   updateGame() {
-    saveGame(this.state.MAPA, this.props.gameId)
+    saveGame(this.state.MAPA, this.props.gameId || this.state.gameId)
   }
    
   render() {
@@ -201,7 +218,7 @@ class Board extends Component {
     return (
       <div>
         <h1>{this.state.isGameOver ? 'Game Over' : ''}</h1>
-        <table>
+        <table style={{width: (this.props.SIZE * 30) + 'px' }}>
           <tbody>
             {
               this.state.MAPA.map((o, row) => {
