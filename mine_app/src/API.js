@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-let API_PATH = 'http://localhost:8000';
+let API_PATH = 'http://api-ms.jcarizza.com';
 
 export function getToken() {
   return localStorage.getItem('token');

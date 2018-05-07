@@ -57,7 +57,7 @@ class Cell extends Component {
   render() {
 
     return (
-      <td style={{height: '30px'}} onClick={this.reveal.bind(this)} className={this.defineStyle()}>{this.props.hidden && this.props.mine ? 'B': this.minesAround()}</td>
+      <td style={{height: '30px'}} onClick={this.reveal.bind(this)} className={this.defineStyle()}>{this.props.hidden ? '': this.minesAround()}</td>
     )
   }
 }
@@ -213,12 +213,12 @@ class Board extends Component {
   }
 
   gameOver() {
-    gameFinished({win: false}, this.props.gameId);
+    gameFinished({win: false}, this.state.gameId || this.state.gameId);
     this.setState({isGameOver: true})
   }
 
   youWin() {
-    gameFinished({win: true}, this.state.gameId);
+    gameFinished({win: true}, this.state.gameId || this.state.gameId);
     this.setState({userWon: true})
   }
 

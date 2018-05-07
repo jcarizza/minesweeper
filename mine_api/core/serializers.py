@@ -28,7 +28,7 @@ class GameSerializer(ModelSerializer):
 class EndGameSerializer(ModelSerializer):
     class Meta:
         model = Game
-        fields = ('time', 'win')
+        fields = ('win', )
 
 
 class LoginSerializer(Serializer):
