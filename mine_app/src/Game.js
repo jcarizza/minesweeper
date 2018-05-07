@@ -1,5 +1,8 @@
 import React, { Component } from 'react';
-import { createGame, getGame, saveGame } from './API';
+
+import { Button } from 'reactstrap';
+
+import { createGame, getGame, saveGame, gameFinished } from './API';
 import './App.css';
 
 
@@ -14,8 +17,7 @@ class Cell extends Component {
   
   reveal(event)  {
 
-
-    if (this.props.isGameOver === true) {
+    if (this.props.isGameOver === true || this.props.userWon == true) {
       this.setState({hidden: false})
       return
     }
@@ -25,7 +27,6 @@ class Cell extends Component {
     }
 
     if (this.props.mine === true) {
-      alert('Game Over');
       this.props.setGameOver();
     }
 
@@ -56,7 +57,7 @@ class Cell extends Component {
   render() {
 
     return (
-      <td style={{height: '30px'}} onClick={this.reveal.bind(this)} className={this.defineStyle()}>{!this.props.hidden && this.props.mine ? 'B': this.minesAround()}</td>
+      <td style={{height: '30px'}} onClick={this.reveal.bind(this)} className={this.defineStyle()}>{this.props.hidden && this.props.mine ? 'B': this.minesAround()}</td>
     )
   }
 }
@@ -76,7 +77,7 @@ class Board extends Component {
 
     if (props.isNewGame) {
       for (let i=0; i < props.SIZE; i++) {
-        let cells = Array.from({length: props.SIZE + 1});
+        let cells = Array.from({length: props.SIZE});
         cells.forEach((obj, index) => {
           cells[index] = {mine: null, flag: null, hidden: true, row: i, col: index, minesAround: 0};
         })
@@ -95,10 +96,12 @@ class Board extends Component {
       }
 
       for (let j=0; j < va.length; j++) {
-        let pos = va[j].split('-');
-        newMAPA[pos[0]][pos[1]].mine = true;
+        if (va[j] !== undefined) {
+          let pos = va[j].split('-');
+          newMAPA[pos[0]][pos[1]].mine = true;
+        }
       }
-      this.state = {rows: [], MAPA: newMAPA, isGameOver: false};
+      this.state = {rows: [], MAPA: newMAPA, isGameOver: false, userWon: false};
       createGame({
         map_length: props.SIZE,
         map_json: JSON.stringify(newMAPA)
@@ -107,7 +110,7 @@ class Board extends Component {
       });
     } else {
       // Load from api
-      this.state = {rows:[], MAPA: [], isGameOver: false};
+      this.state = {rows:[], MAPA: [], isGameOver: false, userWon: false};
       getGame(props.gameId).then(response => {
         this.setState({MAPA: JSON.parse(response.map_json)}); 
       })
@@ -121,7 +124,7 @@ class Board extends Component {
         MAPA: [],
         isGameOver: this.props.isGameOver,
       });
-      this.initialize();
+      this.initialize(props);
     }
   }
 
@@ -181,17 +184,21 @@ class Board extends Component {
       arr[cell.props.row][cell.props.col].minesAround = ma.length
       count += 1;
     })
-    this.setState({MAPA: arr, rows: []});
 
     // Check if user won
     let unRevealed = this.state.rows.filter((cell, index) => {
-      console.log(cell.props.hidden === true, ' ', cell.props.mine === null)
-      console.log(cell.props.hidden === true && cell.props.mine === null)
-      return cell.props.hidden === true && cell.props.mine === null
+      return cell.props.hidden === true && cell.props.mine !== true
     });
-    if (unRevealed.length === 0) {
-      alert('Ganaste!');
+
+    // Last cell to win
+    if (unRevealed.length === 1) {
+      alert('You win! =D');
+      this.setState({userWin: true});
+      this.youWin();
     }
+
+    this.setState({MAPA: arr, rows: []});
+
     this.updateGame()
   }
 
@@ -206,7 +213,13 @@ class Board extends Component {
   }
 
   gameOver() {
+    gameFinished({win: false}, this.props.gameId);
     this.setState({isGameOver: true})
+  }
+
+  youWin() {
+    gameFinished({win: true}, this.state.gameId);
+    this.setState({userWon: true})
   }
 
   updateGame() {
@@ -217,7 +230,7 @@ class Board extends Component {
     
     return (
       <div>
-        <h1>{this.state.isGameOver ? 'Game Over' : ''}</h1>
+        <h1>{this.state.isGameOver ? 'Game Over' : ''}{this.state.userWin ? 'You win!': ''}</h1>
         <table style={{width: (this.props.SIZE * 30) + 'px' }}>
           <tbody>
             {
@@ -268,7 +281,7 @@ class Game extends Component {
         <div className="game-board">
           <Board restartGame={this.state.restartGame} MAPA={this.state.mapa} SIZE={this.state.size} MINES={this.state.mines} isNewGame={this.props.isNewGame} gameId={this.props.gameId} />
         </div>
-        <button onClick={this.startNewGame.bind(this)}>Start new Game</button>
+        <Button style={{marginTop: '5px'}} onClick={() => this.props.goTo('/dash')}>Back to menu</Button>
       </div>
     );
   }

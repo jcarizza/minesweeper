@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { Row, Col, Container, Button, Form, FormGroup, Label, Input } from 'reactstrap';
 import { getGames, login } from './API';
 import './App.css';
 
@@ -32,13 +33,23 @@ class LoginForm extends React.Component {
 
   render() {
     return (
-			<div>
-				<form className={"login-form"}>
-					<input onChange={this.handleChangeUsername.bind(this)} value={this.state.username} placeholder={"username"} type="text" name="username" />
-					<input onChange={this.handleChangePassword.bind(this)} value={this.state.password} placeholder={"password"} type="password" name="password" />
-					<button onClick={this.doLogin.bind(this)} type="submit">Login</button>
-				</form>
-			</div>	
+      <Container>
+        <Row>
+          <Col>
+            <Form>
+              <FormGroup>
+                <Label>Username</Label>
+                <Input onChange={this.handleChangeUsername.bind(this)} value={this.state.username} placeholder={"username"} type="text" name="username" />
+              </FormGroup>
+              <FormGroup>
+                <Label>Password</Label>
+                <Input onChange={this.handleChangePassword.bind(this)} value={this.state.password} placeholder={"password"} type="password" name="password" />
+              </FormGroup>
+              <Button onClick={this.doLogin.bind(this)} type="submit">Login</Button>
+            </Form>
+          </Col>
+        </Row>
+      </Container>
     )
   }
 }

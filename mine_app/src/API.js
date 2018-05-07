@@ -16,6 +16,14 @@ export function saveGame(data, id) {
     }).then(response => { return response.data })
 }
 
+export function gameFinished(data, id) {
+
+  return axios.post(`${API_PATH}/api/game/${id}/finished/`,
+    data,
+    {
+      headers: { Authorization: `Token ${getToken()}`}
+    }).then(response => { return response.data })
+}
 
 export function createGame(data) {
   
@@ -56,6 +64,7 @@ export function login(username, password) {
       'password': password
     }).then((response) => {
       localStorage.setItem('token', response.data.auth_token);
+      localStorage.setItem('username', response.data.username);
       return response.data.auth_token;
     });
 

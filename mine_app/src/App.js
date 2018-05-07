@@ -17,7 +17,6 @@ class App extends Component {
     if (localStorage.getItem('token') != undefined) {
       isLoggedIn = true;
       path = '/dash';
-      console.log('Logueado...');
     }
 
     let gameStyle = {display: path == '/game' ? 'block': 'none'}
@@ -34,13 +33,18 @@ class App extends Component {
       style: {
         gameStyle: gameStyle,
         loginStyle: loginStyle
-      }
+      },
+      username: ''
     }
 
   }
 
   goTo(path) {
     this.setState({path: path})
+  }
+
+  getUsername() {
+    return localStorage.getItem('username');
   }
 
   continueGame(gameId, event) {

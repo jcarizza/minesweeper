@@ -1,7 +1,7 @@
 
 import React, { Component } from 'react';
 
-import { Alert, Button, ListGroup, ListGroupItem } from 'reactstrap';
+import { Badge, Alert, Button, ListGroup, ListGroupItem } from 'reactstrap';
 
 import { getGames } from './API';
 import './App.css';
@@ -22,9 +22,25 @@ class Dash extends Component {
     })
   }
 
+  badgeColor(game) {
+    if (game.finished === true) {
+      return game.win ? 'success': 'danger'
+    } else {
+      return 'secondary'
+    }
+  }
+
+  badgeText(game) {
+    if (game.finished === true) {
+      return game.win ? 'Win': 'Lose'
+    } else {
+      return 'In progress'
+    }
+  }
+
   render() {
     let games = this.state.games.map(game => {
-      return <ListGroupItem>{ game.id } <Button className="float-right" onClick={this.props.continueGame.bind(this, game.id)} >Go</Button></ListGroupItem>
+      return <ListGroupItem>{ game.id } <Badge color={this.badgeColor(game)}>{this.badgeText(game)}</Badge> <Button className="float-right" onClick={this.props.continueGame.bind(this, game.id)} >Go</Button></ListGroupItem>
     })
 
     return ( 
