@@ -28,7 +28,7 @@ I used one model and a field thath store the array map in json for convenience.
 https://documenter.getpostman.com/view/446800/minesweeper/RW1gEGs9#4ea20805-094e-cb21-39d0-85c216f7e977
 
 
+- Game at: http://minesweeper.jcarizza.com
 
-Game at minesweeper.jcarizza.com
-Api at api-ms.jcarizza.com
+- Api at: http://api-ms.jcarizza.com
 
