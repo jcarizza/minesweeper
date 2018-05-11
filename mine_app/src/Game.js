@@ -12,6 +12,7 @@ class Cell extends Component {
     let show = props.hidden ? 'hidden': 'revealed';
     this.state = {
       statusClass: show,
+      flag: props.flag
     }
   }
   
@@ -54,10 +55,23 @@ class Cell extends Component {
     return this.props.minesAround > 0 ? this.props.minesAround: ''
   }
 
+  toggleFlag(event, cell) {
+    this.props.toggleFlag(this.props.row, this.props.col);
+    this.setState(prevState => ({
+      flag: !prevState.flag
+    }));
+    event.preventDefault();
+  }
+
+  showFlag() {
+    console.log(this.state.flag);
+    return this.state.flag === true ? 'F': '';
+  }
+
   render() {
 
     return (
-      <td style={{height: '30px'}} onClick={this.reveal.bind(this)} className={this.defineStyle()}>{this.props.hidden ? '': this.minesAround()}</td>
+      <td style={{height: '30px'}} onClick={this.reveal.bind(this)} onContextMenu={this.toggleFlag.bind(this)} className={this.defineStyle()}>{this.props.hidden ? this.showFlag(): this.minesAround()}</td>
     )
   }
 }
@@ -138,6 +152,14 @@ class Board extends Component {
     }).filter((cell, index) => { 
       return !(parseInt(row) == parseInt(cell.props.row) &&  parseInt(col) == parseInt(cell.props.col))
     });
+  }
+
+  toggleFlag(row, col) {
+    let map = this.state.MAPA;
+    map[row][col].flag = true;
+    this.setState({MAPA: map, rows: []});
+    this.updateGame()
+    debugger;
   }
 
   revealNeibors = (row, col) => {
@@ -238,7 +260,8 @@ class Board extends Component {
                 return (
                   <tr key={row}>
                     {o.map((obj, col) => {
-                      let cell = <Cell saveGame={this.props.updateGame} isGameOver={this.state.isGameOver} setGameOver={this.gameOver.bind(this)} revealNeibors={this.revealNeibors.bind(this)} key={row + '-' + col} mine={obj.mine} hidden={obj.hidden} row={obj.row} col={obj.col} minesAround={obj.minesAround}/>
+                      console.log('===> ', obj.flag);
+                      let cell = <Cell saveGame={this.props.updateGame} toggleFlag={this.toggleFlag.bind(this)} isGameOver={this.state.isGameOver} setGameOver={this.gameOver.bind(this)} revealNeibors={this.revealNeibors.bind(this)} key={row + '-' + col} mine={obj.mine} hidden={obj.hidden} row={obj.row} col={obj.col} minesAround={obj.minesAround} flag={obj.flag} />
                       this.state.rows.push(cell);
                       return cell
                     })}
